@@ -6,7 +6,7 @@ This UserScript requires requires [Greasemonkey](https://addons.mozilla.org/en-U
 
 #### Installation
 
-To install the script, simply visit the script page and Greasemonkey/Tampermonkey should prompt you for installation.
+To install the script, simply visit [the script page](https://llamasoft.github.io/REQ-Progress-Helper/REQHelper.user.js) and Greasemonkey/Tampermonkey should prompt you for installation.
 Once you've installed the script, visit the [Halo 5 requisition page](https://www.halowaypoint.com/en-us/games/halo-5-guardians/xbox-one/requisitions/categories/customization?ownedOnly=False) and you should see some additional buttons.
 
 
