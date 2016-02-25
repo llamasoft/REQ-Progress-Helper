@@ -12,8 +12,8 @@ Once you've installed the script, visit the [Halo 5 requisition page](https://ww
 
 #### Usage
 
-Click any of the buttons at the top of the page and copy the text: https://i.imgur.com/iXhSFmE.png, https://i.imgur.com/CVioH1O.png
+Click any of the buttons at the top of the page and copy the text: [buttons](https://i.imgur.com/iXhSFmE.png) and [copy window](https://i.imgur.com/CVioH1O.png)
 
-Paste the result first cell of the "Have" column: https://i.imgur.com/EfoyhdT.png
+Paste the result first cell of the "Have" column: [pasting into worksheet](https://i.imgur.com/EfoyhdT.png)
 
 Repeat for each category on each of the requisition pages (Customization, Loadout, and Power/Vehicle).
