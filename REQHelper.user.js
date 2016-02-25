@@ -3,7 +3,7 @@
 // @version     1.0.0
 // @namespace   https://github.com/llamasoft
 // @supportURL  https://github.com/llamasoft/REQ-Progress-Helper
-// @updateURL   https://llamasoft.github.io/REQ-Progress-Helper/REQHelper.js
+// @updateURL   https://llamasoft.github.io/REQ-Progress-Helper/REQHelper.user.js
 // @include     https://www.halowaypoint.com/en-us/games/halo-5-guardians/xbox-one/requisitions/categories/customization*
 // @include     https://www.halowaypoint.com/en-us/games/halo-5-guardians/xbox-one/requisitions/categories/loadout*
 // @include     https://www.halowaypoint.com/en-us/games/halo-5-guardians/xbox-one/requisitions/categories/powerandvehicle*
