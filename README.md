@@ -19,7 +19,7 @@ Make a new bookmark and call it "REQ Progress Helper".  Edit the bookmark and re
 
 ### Usage
 
-If you are using the **UserScript method**, simply visit the [Halo 5 requisition page](https://www.halowaypoint.com/en-us/games/halo-5-guardians/xbox-one/requisitions/categories/customization?ownedOnly=False) pages and the buttons should load automatically.  
+If you are using the **UserScript method**, visit the [requisition page](https://www.halowaypoint.com/en-us/games/halo-5-guardians/xbox-one/requisitions/categories/customization?ownedOnly=False) pages and the buttons should load automatically.  
 If you're using the **bookmarklet method**, visit the page and click the bookmark and the buttons will load.  
 If done correctly, the page should look like this:  https://i.imgur.com/iXhSFmE.png
 
