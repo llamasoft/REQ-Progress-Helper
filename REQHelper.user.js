@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        REQ Progress Helper
-// @version     1.0.4
+// @version     1.0.5
 // @namespace   https://github.com/llamasoft
 // @supportURL  https://github.com/llamasoft/REQ-Progress-Helper
 // @updateURL   https://llamasoft.github.io/REQ-Progress-Helper/REQHelper.user.js
@@ -163,6 +163,9 @@ var myItems = {};
 $('div.card button').each(
     function () {
         var curItem = new HaloItem($(this));
+
+        // Skip any "Random" REQs
+        if (curItem.name.indexOf('Random') !== -1) { return; }
 
         // If the item category hasn't been created yet, make it
         if ( !(curItem.category in myItems) ) {
