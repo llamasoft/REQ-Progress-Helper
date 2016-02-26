@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        REQ Progress Helper
-// @version     1.0.3
+// @version     1.0.4
 // @namespace   https://github.com/llamasoft
 // @supportURL  https://github.com/llamasoft/REQ-Progress-Helper
 // @updateURL   https://llamasoft.github.io/REQ-Progress-Helper/REQHelper.user.js
@@ -95,7 +95,7 @@ function copyToClipboard(text) {
 // Converts the items within a category to X/Blank for easy pasting
 function buildCopyText(category) {
     return myItems[category].map(
-        function (item) { return (item.owned ? 'X' : ''); }
+        function (item) { return (item..unlocked() ? 'X' : ''); }
     ).join('\n') + '\n';
 }
 
