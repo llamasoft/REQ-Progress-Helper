@@ -86,8 +86,11 @@ $('div.card button').each(
     function () {
         var curItem = new HaloItem($(this));
 
+        // Skip any "Random" REQs
+        if (curItem.name.indexOf('Random') !== -1) { return; }
+
         // If the item category hasn't been created yet, make it
-        if ( !(curItem.category in myItems) ) {
+        if (!(curItem.category in myItems)) {
             myItems[curItem.category] = [];
         }
 
