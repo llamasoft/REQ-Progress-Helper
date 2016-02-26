@@ -23,7 +23,7 @@ If you are using the **UserScript method**, visit the [requisition page](https:/
 If you're using the **bookmarklet method**, visit the page and click the bookmark and the buttons will load.  
 If done correctly, the page should look like this:  https://i.imgur.com/iXhSFmE.png
 
-Click any of the buttons and copy the text from the popup: https://i.imgur.com/CVioH1O.png
+Click any of the buttons and your REQ progress will be copied to your clipboard.
 
 Paste the result first cell of the "Have" column: https://i.imgur.com/EfoyhdT.png
 

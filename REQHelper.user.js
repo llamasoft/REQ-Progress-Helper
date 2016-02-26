@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        REQ Progress Helper
-// @version     1.0.2
+// @version     1.0.3
 // @namespace   https://github.com/llamasoft
 // @supportURL  https://github.com/llamasoft/REQ-Progress-Helper
 // @updateURL   https://llamasoft.github.io/REQ-Progress-Helper/REQHelper.user.js
@@ -54,11 +54,68 @@ function getProgress(category) {
 }
 
 
+// Credit: http://stackoverflow.com/a/30810322/477563
+function copyToClipboard(text) {
+    var textArea = document.createElement("textarea");
+
+    // Place in top-left corner of screen regardless of scroll position.
+    textArea.style.position = 'fixed';
+    textArea.style.top  = 0;
+    textArea.style.left = 0;
+
+    // Ensure it has a small width and height. Setting to 1px / 1em
+    // doesn't work as this gives a negative w/h on some browsers.
+    textArea.style.width  = '2em';
+    textArea.style.height = '2em';
+
+    // We don't need padding, reducing the size if it does flash render.
+    textArea.style.padding = 0;
+
+    // Clean up any borders.
+    textArea.style.border    = 'none';
+    textArea.style.outline   = 'none';
+    textArea.style.boxShadow = 'none';
+
+    // Avoid flash of white box if rendered for any reason.
+    textArea.style.background = 'transparent';
+
+    // Create the element and select its text
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+
+    try {
+        document.execCommand('copy');
+    } finally {
+        document.body.removeChild(textArea);
+    }
+}
+
+
 // Converts the items within a category to X/Blank for easy pasting
-function buildPasteText(category) {
+function buildCopyText(category) {
     return myItems[category].map(
         function (item) { return (item.owned ? 'X' : ''); }
     ).join('\n');
+}
+
+
+// Display a message and fade it out
+function showMsg(text, duration) {
+    var resetStyle = function (elem) {
+        $(elem).stop().show().css('opacity', 1);
+    }
+
+    // Cancel any animations and reset to full visibility
+    resetStyle('#REQHelperStatus');
+
+    // Set the content and begin a fade out
+    // On completion, reset to "Ready" message
+    $('#REQHelperStatus').html(text);
+    $('#REQHelperStatus').fadeOut(
+        duration || 5000,
+        function () { resetStyle(this); $(this).html('Ready'); }
+    );
 }
 
 
@@ -73,15 +130,20 @@ function buildPasteButton(category) {
         .text(categoryName +'s ('+ progress.have +' / '+ progress.total +')')
         .click(
             function () {
-                window.prompt(
-                    'Copy and paste this into REQ Progress:',
-                    buildPasteText(category)
-                );
+                var reqProgress = buildCopyText(category);
+                try {
+                    copyToClipboard(reqProgress);
+                    showMsg(category + ' progress copied to clipboard');
+
+                } catch (e) {
+                    showMsg('Failed to copy REQ progress to clipboard, manually copy from JavaScript console');
+                    console.log(category + ' REQ progress:\n' + 'BEGIN\n' + reqProgress + 'END');
+                }
             }
         )
     ;
 
-    $('div#REQHelper div.content').append(copyButton);
+    $('div#REQHelperBtns').append(copyButton);
 }
 
 
@@ -113,12 +175,15 @@ $('div.card button').each(
 
 
 // Build a place to put the REQ copy buttons
-$('div#REQHelper').remove();
+$('div#REQHelperMain').remove();
 $('div.req-collection').prepend(
-    '<div id="REQHelper" class="region">'
-  +   '<div class="content">'
+    '<div id="REQHelperMain" class="region">'
+  +   '<div id="REQHelperBtns" class="content">'
   +     '<p class="text--smallest">Use these buttons to copy your REQ progress</p>'
   +     '<hr></hr>'
+  +   '</div>'
+  +   '<div class="content text--smallest">'
+  +     '&gt; <span id="REQHelperStatus">Ready</span>'
   +   '</div>'
   + '</div>'
 );
