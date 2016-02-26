@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        REQ Progress Helper
-// @version     1.0.0
+// @version     1.0.1
 // @namespace   https://github.com/llamasoft
 // @supportURL  https://github.com/llamasoft/REQ-Progress-Helper
 // @updateURL   https://llamasoft.github.io/REQ-Progress-Helper/REQHelper.user.js
