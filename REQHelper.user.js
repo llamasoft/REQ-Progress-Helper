@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        REQ Progress Helper
-// @version     1.0.1
+// @version     1.0.2
 // @namespace   https://github.com/llamasoft
 // @supportURL  https://github.com/llamasoft/REQ-Progress-Helper
 // @updateURL   https://llamasoft.github.io/REQ-Progress-Helper/REQHelper.user.js
@@ -19,8 +19,24 @@ var HaloItem = function (element) {
     this.desc      = $(element).attr('data-description');
     this.owned     = $(element).attr('data-have-owned').toLowerCase() == 'true';
     this.category  = $(element).attr('data-subcategory');
+    this.durable   = $(element).attr('data-is-durable').toLowerCase() == 'true';
     this.rarity    = $(element).attr('data-rarity');
-    this.certified = $(element).attr('data-has-certification');
+    this.certified = $(element).attr('data-has-certification').toLowerCase() == 'true';
+};
+
+HaloItem.prototype.unlocked = function () {
+    // "Unlocked" is different for non-durable (i.e. usable) items
+    // If an item is usable, then you "own" it if you've ever received one,
+    //   but you haven't "unlocked" it until you're certified
+
+    if (this.durable) {
+        // If reuable (loadout, armor, emblem, ...) then ownership is unlock status
+        return this.owned;
+
+    } else {
+        // If usable, certification is unlock status
+        return this.certified;
+    }
 };
 
 
@@ -29,7 +45,7 @@ function getProgress(category) {
     return myItems[category].reduce(
         function (curSum, curItem, i) {
             return {
-                have:  (curSum.have  || 0) + (curItem.owned ? 1 : 0),
+                have:  (curSum.have  || 0) + (curItem.unlocked() ? 1 : 0),
                 total: (curSum.total || 0) + 1
             };
         },
@@ -74,7 +90,7 @@ function buildPasteButton(category) {
 var categoryMapping = {
     'ArmorSuit':     'Armor',
     'WeaponSkin':    'Weapon Skin',
-    '':              'Weapon',
+    '':              'Loadout',
     'PowerWeapon':   'Power Weapon',
     'Equipment':     'Power Up'
 };
@@ -86,11 +102,8 @@ $('div.card button').each(
     function () {
         var curItem = new HaloItem($(this));
 
-        // Skip any "Random" REQs
-        if (curItem.name.indexOf('Random') !== -1) { return; }
-
         // If the item category hasn't been created yet, make it
-        if (!(curItem.category in myItems)) {
+        if ( !(curItem.category in myItems) ) {
             myItems[curItem.category] = [];
         }
 
