@@ -96,7 +96,7 @@ function copyToClipboard(text) {
 function buildCopyText(category) {
     return myItems[category].map(
         function (item) { return (item.owned ? 'X' : ''); }
-    ).join('\n');
+    ).join('\n') + '\n';
 }
 
 
