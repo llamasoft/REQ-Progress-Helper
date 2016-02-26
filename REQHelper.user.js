@@ -95,7 +95,7 @@ function copyToClipboard(text) {
 // Converts the items within a category to X/Blank for easy pasting
 function buildCopyText(category) {
     return myItems[category].map(
-        function (item) { return (item..unlocked() ? 'X' : ''); }
+        function (item) { return (item.unlocked() ? 'X' : ''); }
     ).join('\n') + '\n';
 }
 
