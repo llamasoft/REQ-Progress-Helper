@@ -14,14 +14,16 @@
 
 
 var HaloItem = function (element) {
+    var safeLower = function(v) { return (v || '').toLowerCase(); }
+
     this.id        = $(element).attr('data-id');
     this.name      = $(element).attr('data-name');
     this.desc      = $(element).attr('data-description');
-    this.owned     = $(element).attr('data-have-owned').toLowerCase() == 'true';
     this.category  = $(element).attr('data-subcategory');
-    this.durable   = $(element).attr('data-is-durable').toLowerCase() == 'true';
     this.rarity    = $(element).attr('data-rarity');
-    this.certified = $(element).attr('data-has-certification').toLowerCase() == 'true';
+    this.owned     = safeLower($(element).attr('data-have-owned')) == 'true';
+    this.durable   = safeLower($(element).attr('data-is-durable')) == 'true';
+    this.certified = safeLower($(element).attr('data-has-certification')) == 'true';
 };
 
 HaloItem.prototype.unlocked = function () {
@@ -38,6 +40,79 @@ HaloItem.prototype.unlocked = function () {
         return this.certified;
     }
 };
+
+
+
+// In Halo 5 there are items which are "hidden"
+// They only appear in the item listing if you have them unlocked,
+//   otherwise they simply don't show up
+// These items mess with the alignment of this script's output
+//   when compared to the master item list of the REQ Worksheet
+// To work around this, we occasionally need to inject these
+//   "hidden" items directly into the item listing with dummy values
+function fakeItem(properties) {
+    var fakeItem = new HaloItem('<button>');
+    $.extend(true, fakeItem, properties);
+
+    return fakeItem;
+}
+
+
+// Inserts item into myItems[category] after afterID and before beforeID
+// If afterID or beforeID is null, only one will be considerd, not both
+function injectItem(myItems, category, afterID, beforeID, newItem) {
+    var pos = 0;
+    var len = myItems[category].length;
+    var found = false;
+
+    // Scan the item list to make sure our item isn't already included
+    for (pos = 0; pos < len; pos++) {
+        if (myItems[category][pos].id == newItem.id) {
+            console.log('No need to inject, item already exists');
+            return true;
+        }
+    }
+
+
+    // Before first item
+    if (!afterID && myItems[category][0] == beforeID) {
+        pos = 0;
+        found = true;
+    }
+
+    // After last item
+    if (!beforeID && myItems[category][len - 1] == afterID) {
+        pos = length;
+        found = true;
+    }
+
+    // Between two items
+    for (pos = 1; pos < len && !found; pos++) {
+        if ( (!afterID  || myItems[category][pos - 1].id == afterID )
+          && (!beforeID || myItems[category][pos    ].id == beforeID) ) {
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        showMsg('Item injection failed, see console for information', 60 * 1000);
+        console.error('Item injection failed, please contact the developer');
+        console.error('category:', category);
+        console.error('afterID:',  afterID );
+        console.error('beforeID:', beforeID);
+        console.error(JSON.stringify(myItems[category]));
+        return false;
+    }
+
+
+    // Add the new item in the correct position
+    console.log('Item injected at position', pos);
+    console.log('Current value', myItems[category][pos]);
+    myItems[category].splice(pos, 0, newItem);
+    return true;
+}
+
 
 
 // Returns the owned and total count of all items in a category
@@ -175,6 +250,28 @@ $('div.card button').each(
         myItems[curItem.category].push(curItem);
     }
 );
+
+// Turns out that some items are hidden
+// Unless you own them, they don't even appear in the item listing
+// Here we try to inject them, but this method isn't great and is probably prone to breaking
+injectItem(myItems, 'WeaponSkin',
+    // Between Spirit of Fire AR and Blue Team AR
+    '87009bbc-20c8-41a4-8f5e-9885ce113e1f', '8a20aa5b-dab1-4598-996c-ebb35da91b5d',
+    fakeItem({
+        id: '406455f4-9f3e-4979-9feb-aef414f536c6',
+        name: '343 Industries - Assault Rifle'
+    })
+);
+
+injectItem(myItems, 'WeaponSkin',
+    // Between 343 Industries AR and Blue Team AR
+    '406455f4-9f3e-4979-9feb-aef414f536c6', '8a20aa5b-dab1-4598-996c-ebb35da91b5d',
+    fakeItem({
+        id: 'd6bd073f-f0ec-4b91-b6b7-656607595b96',
+        name: '343 Industries - Magnum'
+    })
+);
+
 
 
 // Build a place to put the REQ copy buttons
