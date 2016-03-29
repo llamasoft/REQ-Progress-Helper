@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        REQ Progress Helper
-// @version     1.0.6
+// @version     1.0.7
 // @namespace   https://github.com/llamasoft
 // @supportURL  https://github.com/llamasoft/REQ-Progress-Helper
 // @updateURL   https://llamasoft.github.io/REQ-Progress-Helper/REQHelper.user.js
@@ -61,6 +61,8 @@ function fakeItem(properties) {
 // Inserts item into myItems[category] after afterID and before beforeID
 // If afterID or beforeID is null, only one will be considerd, not both
 function injectItem(myItems, category, afterID, beforeID, newItem) {
+    if ( !(category in myItems) ) { return false; }
+    
     var pos = 0;
     var len = myItems[category].length;
     var found = false;
